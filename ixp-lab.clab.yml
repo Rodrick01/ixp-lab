@@ -6,62 +6,38 @@ mgmt:
   ipv4-subnet: 10.254.0.0/24
 
 topology:
-  kinds:
-    linux:
-      image: alpine:3.18
-    vr-vmx:
-      image: vrnetlab/vr-vmx:latest # O vr-vsrx dependiendo de lo que se tenga empaquetado
-    
   nodes:
-    # Router 1 - Juniper
     r1:
       kind: vr-vmx
+      image: vrnetlab/vr-vmx:latest
       mgmt-ipv4: 10.254.0.11
-
-    # Router 3 - Juniper
     r3:
       kind: vr-vmx
+      image: vrnetlab/vr-vmx:latest
       mgmt-ipv4: 10.254.0.13
-
-    # Router 4 - Juniper
     r4:
       kind: vr-vmx
+      image: vrnetlab/vr-vmx:latest
       mgmt-ipv4: 10.254.0.14
-
-    # GoBGP Router Target
     g2:
       kind: linux
-      image: pierky/gobgp:latest # Ajustar a imagen concreta o usar binarios sobre alpine
+      image: alpine-gobgp-frr:latest
       mgmt-ipv4: 10.254.0.102
-
-    # GoBGP Route Server
     rs:
       kind: linux
-      image: pierky/gobgp:latest
+      image: alpine-gobgp:latest
       mgmt-ipv4: 10.254.0.150
-
-    # Util - Monitoring Server
     util:
       kind: linux
       image: alpine:3.18
       mgmt-ipv4: 10.254.0.250
+    ix-switch:
+      kind: bridge
 
   links:
-    # eBGP: r1 - r4
     - endpoints: ["r1:eth1", "r4:eth1"]
-    
-    # iBGP & OSPF Area 0: r1 - g2
     - endpoints: ["r1:eth2", "g2:eth1"]
-
-    # eBGP con IX (Punto de Interconexión) - Topología Tipo Estrella al Route Server
-    # En un IX real se usaría un switch L2. Containerlab lo emula conectando todo a un bridge
     - endpoints: ["g2:eth2", "ix-switch:eth1"]
     - endpoints: ["rs:eth1", "ix-switch:eth2"]
     - endpoints: ["r3:eth1", "ix-switch:eth3"]
     - endpoints: ["r1:eth3", "ix-switch:eth4"]
-
-    # El switch IX (bridge) oculto
-  # Podemos usar un host tipo bridge para el IX
-  nodes:
-    ix-switch:
-      kind: bridge
