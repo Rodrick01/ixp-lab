@@ -10,7 +10,11 @@ topology:
     {{ .Name }}:
       kind: {{ .Kind }}{{ if .Image }}
       image: {{ .Image }}{{ end }}{{ if .MgmtIPv4 }}
-      mgmt-ipv4: {{ .MgmtIPv4 }}{{ end }}{{ end }}
+      mgmt-ipv4: {{ .MgmtIPv4 }}{{ end }}{{ if .Ports }}
+      ports:{{ range .Ports }}
+        - {{ . }}{{ end }}{{ end }}{{ if .Binds }}
+      binds:{{ range .Binds }}
+        - {{ . }}{{ end }}{{ end }}{{ end }}
 
   links:{{ range .Links }}
     - endpoints: [{{ range $index, $element := .Endpoints }}{{ if $index }}, {{ end }}"{{ $element }}"{{ end }}]{{ end }}

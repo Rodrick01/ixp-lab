@@ -31,6 +31,20 @@ topology:
       kind: linux
       image: alpine:3.18
       mgmt-ipv4: 10.254.0.250
+    prometheus:
+      kind: linux
+      image: prom/prometheus:latest
+      mgmt-ipv4: 10.254.0.201
+      ports:
+        - 9090:9090
+      binds:
+        - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    grafana:
+      kind: linux
+      image: grafana/grafana:latest
+      mgmt-ipv4: 10.254.0.202
+      ports:
+        - 3000:3000
     ix-switch:
       kind: bridge
 

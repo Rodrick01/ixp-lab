@@ -18,6 +18,9 @@ Los nodos `g2` y `rs`, que en el `Vagrantfile` original utilizan imágenes compl
 ### 4. Actualización a FRR
 El nodo `g2` original utiliza Quagga para inyectar rutas al kernel. Esta propuesta actualiza el motor de enrutamiento a **FRR** (Free Range Routing) contenizado, que es el sucesor moderno, más mantenido y robusto de Quagga, y es mucho más adecuado para manipular la FIB en entornos de IXP de alta densidad.
 
+### 5. Observabilidad Nativa (SRE Ready)
+Se implementó un stack de observabilidad *out-of-the-box* sumando contenedores de **Prometheus** y **Grafana** al orquestador Go. GoBGP expone métricas nativas en formato Prometheus que permiten ver en tiempo real la convergencia y estados de los *peers* BGP, saltando del monitoreo básico/ausente original a un estándar Enterprise Tier-1.
+
 ---
 
 Adjunto además el diagrama actualizado de la topología y el código Go que orquesta la generación de este ecosistema de manera dinámica. ¡Espero que esta contribución ayude a que el tutorial siga siendo la excelente referencia que es hoy en día pero adaptada a tecnologías Cloud-Native SRE!

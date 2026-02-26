@@ -1,0 +1,7 @@
+global:
+  scrape_interval: 15s
+
+scrape_configs:
+  - job_name: 'gobgp'
+    static_configs:
+      - targets: ['g2:2112', 'rs:2112']

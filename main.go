@@ -12,6 +12,8 @@ type Node struct {
 	Kind     string
 	Image    string
 	MgmtIPv4 string
+	Ports    []string
+	Binds    []string
 }
 
 // Link representa una conexión punto a punto o multipunto
@@ -36,10 +38,28 @@ func main() {
 			{Name: "r1", Kind: "vr-vmx", Image: "vrnetlab/vr-vmx:latest", MgmtIPv4: "10.254.0.11"},
 			{Name: "r3", Kind: "vr-vmx", Image: "vrnetlab/vr-vmx:latest", MgmtIPv4: "10.254.0.13"},
 			{Name: "r4", Kind: "vr-vmx", Image: "vrnetlab/vr-vmx:latest", MgmtIPv4: "10.254.0.14"},
-			// Nodos GoBGP modernizados con Alpine y FRR
+			// Nodos GoBGP modernizados con Alpine y FRR (exponiendo métricas en puerto 2112)
 			{Name: "g2", Kind: "linux", Image: "alpine-gobgp-frr:latest", MgmtIPv4: "10.254.0.102"},
 			{Name: "rs", Kind: "linux", Image: "alpine-gobgp:latest", MgmtIPv4: "10.254.0.150"},
-			{Name: "util", Kind: "linux", Image: "alpine:3.18", MgmtIPv4: "10.254.0.250"},
+
+			// Stack de Observabilidad SRE
+			{Name: "util", Kind: "linux", Image: "alpine:3.18", MgmtIPv4: "10.254.0.250"}, // Colector BMP / Influx
+			{
+				Name:     "prometheus",
+				Kind:     "linux",
+				Image:    "prom/prometheus:latest",
+				MgmtIPv4: "10.254.0.201",
+				Ports:    []string{"9090:9090"},
+				Binds:    []string{"./prometheus.yml:/etc/prometheus/prometheus.yml:ro"},
+			},
+			{
+				Name:     "grafana",
+				Kind:     "linux",
+				Image:    "grafana/grafana:latest",
+				MgmtIPv4: "10.254.0.202",
+				Ports:    []string{"3000:3000"},
+			},
+
 			// Switch bridge para simular el Punto de Intercambio (L2)
 			{Name: "ix-switch", Kind: "bridge", Image: "", MgmtIPv4: ""},
 		},
