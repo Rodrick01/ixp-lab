@@ -21,12 +21,23 @@ topology:
       mgmt-ipv4: 10.254.0.14
     g2:
       kind: linux
-      image: alpine-gobgp-frr:latest
+      image: osrg/gobgp:latest
       mgmt-ipv4: 10.254.0.102
+      binds:
+        - ./g2_gobgpd.toml:/etc/gobgp/gobgpd.toml:ro
+      exec:
+        - ip addr add 10.1.12.2/24 dev eth1
+        - ip addr add 10.173.176.2/24 dev eth2
+        - gobgpd -f /etc/gobgp/gobgpd.toml -d
     rs:
       kind: linux
-      image: alpine-gobgp:latest
+      image: osrg/gobgp:latest
       mgmt-ipv4: 10.254.0.150
+      binds:
+        - ./rs_gobgpd.toml:/etc/gobgp/gobgpd.toml:ro
+      exec:
+        - ip addr add 10.173.176.254/24 dev eth1
+        - gobgpd -f /etc/gobgp/gobgpd.toml -d
     util:
       kind: linux
       image: alpine:3.18

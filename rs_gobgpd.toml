@@ -1,0 +1,28 @@
+[global.config]
+  as = 65686
+  router-id = "10.173.176.254"
+  port = 179
+
+# Peer G2
+[[neighbors]]
+  [neighbors.config]
+    neighbor-address = "10.173.176.2"
+    peer-as = 65001
+  [neighbors.route-server.config]
+    route-server-client = true
+
+# Peer R1
+[[neighbors]]
+  [neighbors.config]
+    neighbor-address = "10.173.176.1"
+    peer-as = 65001
+  [neighbors.route-server.config]
+    route-server-client = true
+
+# Peer R3
+[[neighbors]]
+  [neighbors.config]
+    neighbor-address = "10.173.176.3"
+    peer-as = 65003
+  [neighbors.route-server.config]
+    route-server-client = true

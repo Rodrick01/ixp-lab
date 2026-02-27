@@ -14,6 +14,8 @@ topology:
       ports:{{ range .Ports }}
         - {{ . }}{{ end }}{{ end }}{{ if .Binds }}
       binds:{{ range .Binds }}
+        - {{ . }}{{ end }}{{ end }}{{ if .Exec }}
+      exec:{{ range .Exec }}
         - {{ . }}{{ end }}{{ end }}{{ end }}
 
   links:{{ range .Links }}

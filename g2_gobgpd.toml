@@ -1,0 +1,20 @@
+[global.config]
+  as = 65001
+  router-id = "10.1.0.102"
+  port = 179
+
+# Conexión al Route Server en el IXP
+[[neighbors]]
+  [neighbors.config]
+    neighbor-address = "10.173.176.254"
+    peer-as = 65686
+  [neighbors.transport.config]
+    local-address = "10.173.176.2"
+
+# Conexión iBGP con R1
+[[neighbors]]
+  [neighbors.config]
+    neighbor-address = "10.1.12.1"
+    peer-as = 65001
+  [neighbors.transport.config]
+    local-address = "10.1.12.2"
