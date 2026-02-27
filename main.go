@@ -49,7 +49,7 @@ func main() {
 				Exec: []string{
 					"ip addr add 10.1.12.2/24 dev eth1",
 					"ip addr add 10.173.176.2/24 dev eth2",
-					"gobgpd -f /etc/gobgp/gobgpd.toml -d",
+					"gobgpd -f /etc/gobgp/gobgpd.toml --pprof-disable --api-hosts=':50051' -p 2112 -d",
 				},
 			},
 			{
@@ -60,7 +60,7 @@ func main() {
 				Binds:    []string{"./rs_gobgpd.toml:/etc/gobgp/gobgpd.toml:ro"},
 				Exec: []string{
 					"ip addr add 10.173.176.254/24 dev eth1",
-					"gobgpd -f /etc/gobgp/gobgpd.toml -d",
+					"gobgpd -f /etc/gobgp/gobgpd.toml --pprof-disable --api-hosts=':50051' -p 2112 -d",
 				},
 			},
 
@@ -80,6 +80,10 @@ func main() {
 				Image:    "grafana/grafana:latest",
 				MgmtIPv4: "10.254.0.202",
 				Ports:    []string{"3000:3000"},
+				Binds: []string{
+					"./grafana/provisioning:/etc/grafana/provisioning",
+					"./grafana/dashboards:/var/lib/grafana/dashboards",
+				},
 			},
 
 			// Switch bridge para simular el Punto de Intercambio (L2)

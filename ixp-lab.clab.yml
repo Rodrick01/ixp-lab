@@ -28,7 +28,7 @@ topology:
       exec:
         - ip addr add 10.1.12.2/24 dev eth1
         - ip addr add 10.173.176.2/24 dev eth2
-        - gobgpd -f /etc/gobgp/gobgpd.toml -d
+        - gobgpd -f /etc/gobgp/gobgpd.toml --pprof-disable --api-hosts=':50051' -p 2112 -d
     rs:
       kind: linux
       image: osrg/gobgp:latest
@@ -37,7 +37,7 @@ topology:
         - ./rs_gobgpd.toml:/etc/gobgp/gobgpd.toml:ro
       exec:
         - ip addr add 10.173.176.254/24 dev eth1
-        - gobgpd -f /etc/gobgp/gobgpd.toml -d
+        - gobgpd -f /etc/gobgp/gobgpd.toml --pprof-disable --api-hosts=':50051' -p 2112 -d
     util:
       kind: linux
       image: alpine:3.18
@@ -56,6 +56,9 @@ topology:
       mgmt-ipv4: 10.254.0.202
       ports:
         - 3000:3000
+      binds:
+        - ./grafana/provisioning:/etc/grafana/provisioning
+        - ./grafana/dashboards:/var/lib/grafana/dashboards
     ix-switch:
       kind: bridge
 
